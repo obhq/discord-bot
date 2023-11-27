@@ -115,7 +115,21 @@ namespace Oboteration.Funcs
                     string responseBody = await jsonResponseMessage.Content.ReadAsStringAsync();
                     Oboteration.Models.Sony.Root? issueRoot = JsonConvert.DeserializeObject<Oboteration.Models.Sony.Root>(responseBody);
 
-                    update.pkgLink = issueRoot?.pieces[0].url;
+                    List<Sony.Piece> pieces = new List<Sony.Piece>();
+
+                    if (issueRoot?.numberOfSplitFiles > 1)
+                    {
+                        for (int i = 0; i < issueRoot.pieces.Count; i++)
+                        {
+                            pieces.Add(issueRoot.pieces[i]);
+                        }
+                        update.pieces = pieces;
+                    }
+                    else
+                    {
+                        pieces.Add(issueRoot.pieces[0]);
+                        update.pieces = pieces;
+                    }
                 }
 
 

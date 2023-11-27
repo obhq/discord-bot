@@ -12,9 +12,9 @@ namespace Oboteration.Models
         public string version;
         public double size;
         public bool isGB;
-        public string pkgLink;
         public string jsonLink;
         public bool updateExist;
         public string xmlLink;
+        public List<Oboteration.Models.Sony.Piece> pieces;
     }
 }

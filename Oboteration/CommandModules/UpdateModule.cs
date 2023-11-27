@@ -50,7 +50,7 @@ namespace Oboteration.CommandModules
             }
 
             //Format the links
-            string downloadLink = Format.Url($"{update.Title}_{update.version}.pkg", update.pkgLink);
+            string downloadLink = Format.Url($"{update.Title}_{update.version}.pkg", update.pieces[0].url);
             string jsonLink = Format.Url($"{TitleID}.json", update.jsonLink);
 
             EmbedBuilder eb = new EmbedBuilder
@@ -61,7 +61,6 @@ namespace Oboteration.CommandModules
             };
 
             //Adding embed fields
-
             eb.AddField($"Update version:", $"{update.version}");
             string size = String.Format(new System.Globalization.CultureInfo("en-US"), "{0:0.00}", update.size);
             if (update.isGB)
@@ -76,8 +75,30 @@ namespace Oboteration.CommandModules
                 eb.AddField($"Update size: ", $"{size}MB");
             }
 
-            eb.AddField($"Download Link: ", $"{downloadLink}")
-            .AddField($"Json Link: ", $"{jsonLink}");
+            if (update.pieces.Count > 1)
+            {
+                for (int i = 0; i < update.pieces.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        eb.AddField($"‎‎ ", $"{Format.Url($"{update.Title}_{update.version}.pkg [Part {i + 1}]", update.pieces[i].url)}");
+
+                    }
+                    else
+                    {
+                        eb.AddField($"Download Links: ", $"{Format.Url($"{update.Title}_{update.version}.pkg [Part {i + 1}]", update.pieces[i].url)}");
+
+                    }
+
+                }
+                eb.AddField($"Json Link: ", $"{jsonLink}");
+            }
+            else
+            {
+                eb.AddField($"Download Link: ", $"{downloadLink}")
+                .AddField($"Json Link: ", $"{jsonLink}");
+            }
+            
 
 
 
